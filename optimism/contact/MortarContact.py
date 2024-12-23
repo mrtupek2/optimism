@@ -1,9 +1,7 @@
 import jax
 from jax import numpy as jnp
-from optimism import QuadratureRule
-from optimism import Mesh
-from typing import Callable
-from functools import partial
+
+
 
 # some normal utilities
 
