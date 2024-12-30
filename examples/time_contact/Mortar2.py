@@ -35,8 +35,6 @@ def compute_intersection(edgeA, edgeB, normal):
     xiBs = np.hstack((xiBs1, np.arange(2)))
     gs = np.hstack((gs1, gs2))
 
-    print('gs', gs)
-
     xiAgood = jax.vmap(lambda xia, xib: np.where((xia >= 0.0) & (xia <= 1.0) & (xib >= 0.0) & (xib <= 1.0), xia, np.nan))(xiAs, xiBs)
     argsMinMax = np.array([np.nanargmin(xiAgood), np.nanargmax(xiAgood)])
 

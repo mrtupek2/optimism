@@ -14,7 +14,7 @@ def create_surface_0(t):
     #x0b = np.array([1.0, -S[t]])
     #x0c = np.array([1.2, 0.5])
     x0a = np.array([0.0+S[t], 0.0])
-    x0b = np.array([0.2+S[t], 0.0]) # -0.1
+    x0b = np.array([0.2+S[t], -.1])
     x0c = np.array([0.4+S[t], 0.0])
     return np.array([x0a, x0b, x0c])
 
@@ -51,9 +51,10 @@ for i_s, s in enumerate(S):
             nodal_areas = nodal_areas.at[i_s,c1].add(areas1)
 
     #print('nodal gaps = ', nodal_gaps)
-    nodal_areas = nodal_areas.at[nodal_areas==0].set(1.0)
     #print('nodal areas = ', nodal_areas)
-    nodal_gaps = nodal_gaps / nodal_areas
+
+nodal_areas = nodal_areas.at[nodal_areas==0].set(1.0)
+nodal_gaps = nodal_gaps / nodal_areas
 
 def draw_surface(ax, num, t):
     surface = create_surface_0(t) if num==0 else create_surface_1(t)
@@ -87,7 +88,7 @@ axn = fig.add_axes([0.25, 0.1, 0.65, 0.03])
 allowed_amplitudes = np.arange(N)
 t_slider = Slider(axn, 'time', 0, N, valinit=0, valstep = allowed_amplitudes)
 
-n1 = 2
+n1 = 1
 n2 = 4
 curve0, = axs[1].plot(S,  nodal_gaps[:,n1], 'b')
 dot0, = axs[1].plot(S[0], nodal_gaps[0,n1],'ro')
