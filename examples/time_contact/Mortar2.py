@@ -35,6 +35,8 @@ def compute_intersection(edgeA, edgeB, normal):
     xiBs = np.hstack((xiBs1, np.arange(2)))
     gs = np.hstack((gs1, gs2))
 
+    print('gs', gs)
+
     xiAgood = jax.vmap(lambda xia, xib: np.where((xia >= 0.0) & (xia <= 1.0) & (xib >= 0.0) & (xib <= 1.0), xia, np.nan))(xiAs, xiBs)
     argsMinMax = np.array([np.nanargmin(xiAgood), np.nanargmax(xiAgood)])
 
@@ -65,20 +67,26 @@ def integrate_gap_against_shape(edge0, edge1):
 
     xi0t = np.array([xi0[0], 0.5*(xi0[0]+xi0[1]), xi0[1]])
     gt = np.array([g[0]/6, (g[0]+g[1])/3, g[1]/6])
+    wght = np.array([1./6, 2./3, 1./6])
 
     Nl0 = 1.0 - xi0t
     Nr0 = xi0t
-    areaGapLeft0 = gt @ Nl0 * integralLength #0.5 * (g @ Nl0) * integralLength
-    areaGapRight0 = gt @ Nr0 * integralLength #0.5 * (g @ Nr0) * integralLength
+    areaGapLeft0 = gt @ Nl0 * integralLength
+    areaGapRight0 = gt @ Nr0 * integralLength
+    areaLeft0 = wght @ Nl0 * integralLength
+    areaRight0 = wght @ Nr0 * integralLength
 
     xi1t = np.array([xi1[0], 0.5*(xi1[0]+xi1[1]), xi1[1]])
 
     Nl1 = 1.0 - xi1t
     Nr1 = xi1t
-    areaGapLeft1 = gt @ Nl1 * integralLength #0.5 * (g @ Nl1) * integralLength
-    areaGapRight1 = gt @ Nr1 * integralLength#0.5 * (g @ Nr1) * integralLength
+    areaGapLeft1 = gt @ Nl1 * integralLength
+    areaGapRight1 = gt @ Nr1 * integralLength
+    areaLeft1 = wght @ Nl1 * integralLength
+    areaRight1 = wght @ Nr1 * integralLength
 
-    return np.array([areaGapLeft0, areaGapRight0]), np.array([areaGapLeft1, areaGapRight1])
+    return np.array([areaGapLeft0, areaGapRight0]), np.array([areaGapLeft1, areaGapRight1]), \
+           np.array([areaLeft0, areaRight0]), np.array([areaLeft1, areaRight1])
 
 
 @jax.jit
